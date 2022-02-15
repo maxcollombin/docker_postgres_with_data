@@ -2,10 +2,11 @@ version: '3.7'
 services:
     postgres:
         image: postgres:10.5
+        container_name: postgres
         restart: always
         environment: 
-          - POSTGRES_USER=postgres
-          - POSTGRES_PASSWORD=postgres
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
         logging:
           options:
             max-size: 10m
@@ -18,3 +19,13 @@ services:
           - ./sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
           # copy the sql script to fill tables
           - ./sql/fill_tables.sql:/docker-entrypoint-initdb.d/fill_tables.sql
+    # pgAdmin instance
+    pgadmin:
+      image: dpage/pgadmin4
+      container_name: pgadmin4
+      restart: always
+      environment:
+        PGADMIN_DEFAULT_EMAIL: admin@admin.com
+        PGADMIN_DEFAULT_PASSWORD: root
+      ports:
+        - '5050:80'
